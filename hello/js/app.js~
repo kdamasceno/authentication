@@ -52,8 +52,10 @@ function HelloService($http, AuthorizationEndpoint, ClientID, RedirectURI) {
 
 
 service.loginGluu2 = function () {
-    
-    var data = {
+    var response = $http({
+      method: "POST",
+      url: (AuthorizationEndpoint),
+      data: {
         response_type: 'id_token token',
       	client_id: ClientID,
       	scope: 'email',
@@ -61,35 +63,12 @@ service.loginGluu2 = function () {
       	nonce: 'qualquertexto',
       	display: 'page',
       	prompt: 'login',
-    };
-
-    var response = $http.jsonp(AuthorizationEndpoint +"?callback=JSON_CALLBACK", data)
-	    .success(function (data, status, headers, config){
-     	 	console.log(data);
-	        return data;
-	    })
-	    .error(function (data, status, headers, config){
-     	 	console.log(data);
-     	   return data;
-	    });
-
-	// var response = $http({
-  //     method: "POST",
-  //     url: (AuthorizationEndpoint),
-  //     data: {
-  //       response_type: 'id_token token',
-  //     	client_id: ClientID,
-  //     	scope: 'email',
-  //     	redirect_uri: RedirectURI,
-  //     	nonce: 'qualquertexto',
-  //     	display: 'page',
-  //     	prompt: 'login',
-  //     },
-  //     dataType: "json"
-  //   }).then(function(result){
-  //     	console.log(result);
-  //       return result.data;
-  //   });
+      },
+      dataType: "json"
+    }).then(function(result){
+      	console.log(result);
+        return result.data;
+    });
     return response;
   };
  

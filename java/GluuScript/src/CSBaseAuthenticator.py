@@ -50,7 +50,7 @@ class PersonAuthentication(PersonAuthenticationType):
 
             logged_in = False
             if (StringHelper.isNotEmptyString(user_name) and StringHelper.isNotEmptyString(user_password)):
-                logged_in = self.csbaseProxy.authenticate(user_name, user_password, java.util.Locale.US)
+                logged_in = self.csbaseProxy.authenticate(user_name, user_password)
 
             if (not logged_in):
                 return False

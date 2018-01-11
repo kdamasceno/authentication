@@ -23,7 +23,7 @@ class CSBaseTest(object):
         self.csbaseProxy = CSBaseLoginProxy("localhost","5099", True)
         #print "CSBase. Initialized successfully"
     def authenticate(self):
-        logged_in = self.csbaseProxy.authenticate("lmachado", "leo", java.util.Locale.US)
+        logged_in = self.csbaseProxy.authenticate("lmachado", "leo")
         print logged_in
-        logged_in = self.csbaseProxy.authenticate("admin", "1234555", java.util.Locale.US)
+        logged_in = self.csbaseProxy.authenticate("admin", "1234555")
         print logged_in

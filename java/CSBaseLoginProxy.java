@@ -66,6 +66,13 @@ public class CSBaseLoginProxy {
     }
 
     /**
+     * Método sobrescrito porque, por alguma razão o jython do gluuserver não consegue acessar o java.util.Locale. O mesmo código funciona em todos os outros jythons testados
+     */
+    public boolean authenticate(String login, String passwd) {
+	return this.authenticate(login, passwd, Locale.US);
+    }
+
+    /**
      * Autentica um determinado usuário com login e senha
      * @param login login do usuário
      * @param passwd senha do usuário

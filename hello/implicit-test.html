@@ -16,7 +16,7 @@
             // Remove State and Nonce from previous session
             sessionStorage.removeItem('state');
             sessionStorage.removeItem('nonce');
-            loginRequest = OIDC.generateLoginRequest({scope : 'openid user_name',
+            loginRequest = OIDC.generateLoginRequest({scope : 'openid profile',
             response_type : 'token id_token', display: 'page', prompt: 'login'});
         </script>
 
@@ -42,7 +42,7 @@
         </script>
         <br>
         <div class="buttons">
-          <button onClick="OIDC.login( {scope : 'openid user_name',
+          <button onClick="OIDC.login( {scope : 'openid profile',
           response_type : 'token id_token', display: 'page', prompt: 'login'} );"
           type="button" class="btn btn-success" >Authenticate</button>
         </div>

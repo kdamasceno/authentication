@@ -1,17 +1,33 @@
-<!doctype html>
-<html lang="en" ng-app='HelloApp'>
-  <head>
-    <title>Hello World App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles/bootstrap.min.css">
-    <script src="angular.min.js"></script>
-   <script src="app.js"></script>
-  </head>
-<body>
-<div class="container" ng-controller='HelloController as ctrl'>
-    <h1>Hello World</h1>
-	<div class="form-group">
-      Home privada do Hello World App
-    </div>
-</body>
-</html>
+<link rel="stylesheet" href="styles/bootstrap.min.css">
+<!DOCTYPE html>
+<html lang="en">
+    <HEAD>
+       <script src="js/openidconnect.js"></script>
+
+        <script>
+            OIDC.restoreInfo();                        
+            var id_token = OIDC.getValidIdToken();
+            
+            var access_token = OIDC.getAccessToken();
+            var tokenClaims = JSON.parse(OIDC.getIdTokenParts(id_token)[1]);
+            var userInfoClaims = JSON.parse(OIDC.getUserInfo(access_token));
+            var tokenClaimsHTMLString = JSONObjToHTMLTable(tokenClaims);
+            var userInfoClaimsHTMLString = JSONObjToHTMLTable(userInfoClaims);
+            OIDC.debug(true, id_token);
+            function print_id_token(){
+                document.getElementById("retrievedInfo").innerHTML = '<b>Id_token</b>' + tokenClaimsHTMLString +
+                                                                '\n<b>User Info</b>' + userInfoClaimsHTMLString;
+            }
+        </script>
+    </HEAD>
+
+    <BODY onload="print_id_token();">
+      <div class="container">
+        <h1>Implicit Flow Test Callback</h1>        
+        <div id="retrievedInfo">
+            id_token claims and userinfo not found.
+        </div>
+        <div id="result"></div>
+      </div>
+    </BODY>
+</HTML>

@@ -36,12 +36,13 @@ function HelloService($http, AuthorizationEndpoint, ClientID, RedirectURI) {
       url: (AuthorizationEndpoint),
       params: {
         response_type: 'id_token token',
+	      scope: 'openid profile email',
+      	nonce: 'qualquertextoabc',
 	      client_id: ClientID,
-	      scope: 'email',
       	redirect_uri: RedirectURI,
-      	nonce: 'qualquertexto',
-      	display: 'page',
-	      prompt: 'login',
+        state: 'abc',
+      	display: 'page',        
+	      // prompt: 'login',
       }
     }).then(function(result){
       	console.log(result);

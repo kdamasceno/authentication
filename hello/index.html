@@ -4,19 +4,23 @@
     <title>Hello World App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
+    
+    <!-- Para teste de requisição com 1 botão -->
     <script src="js/angular.min.js"></script>
-    <script src="js/jquery-3.2.1.js"></script>
-    <script src="js/temp-ajax.js"></script>
     <script src="js/app.js"></script>
+    
+    <!-- Para teste de requisição com 2 botão -->
+    <script src="js/jquery-3.2.1.js"></script>
+    <script src="js/request-jquery.js"></script>
   </head>
 <body>
   <div class="container" ng-controller='HelloController as ctrl'>
     <h1>Hello World</h1>
 	  <div class="form-group">
-      <button class="btn btn-default" ng-click="ctrl.getlogin();">Logar via GET</button>
-      <button class="btn btn-default" ng-click="ctrl.postlogin();">Logar via POST</button>
-      <button class="btn btn-default" onclick="loadDoc();">Logar via GET/Ajax</button>
+      <button class="btn btn-default" ng-click="ctrl.getlogin();">Logar via GET [Angular]</button>      
+      <button class="btn btn-default" onclick="sendRequest('GET','https://gluuserver/oxauth/restv1/authorize','https://ariramba.tecgraf.puc-rio.br:8443/hello/callbackpage1.html', '@!57E7.F422.1BEC.8661!0001!2917.B555!0008!1057.2149.C76E.504A');">Logar via GET [JQuery]</button>
     </div>	  
   </div>
 </body>
 </html>
+  

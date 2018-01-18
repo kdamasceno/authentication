@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?eclipse-pydev version="1.0"?><pydev_project>
+<pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
+<path>/${PROJECT_DIR_NAME}/src</path>
+<path>/GluuScript/lib/csbase_common_util_vMARLIM1.29.jar</path>
+<path>/GluuScript/lib/oxauth-server-3.1.1.Final.jar</path>
+<path>/GluuScript/lib/oxcore-service-3.1.1.Final.jar</path>
+<path>/GluuScript/lib/oxcore-util-3.1.1.Final.jar</path>
+</pydev_pathproperty>
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">jython interpreter</pydev_property>
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Default</pydev_property>
+</pydev_project>

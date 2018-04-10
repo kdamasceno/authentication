@@ -9,9 +9,11 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -38,7 +40,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class AuthResource {
-
+	
 	/**
 	 * 
 	 * @param multiPart
@@ -65,17 +67,16 @@ public class AuthResource {
 			JSONParser jsonParser = new JSONParser();
 			JSONObject tokenObject = (JSONObject) jsonParser.parse(strTokenResponse);
 
-			// para teste...
+			// mapa com tokenid claims de interesse (para validação futura)
 			Map<String, Object> tokenIDClaims = new HashMap<>();
 
 			// Token Error Response
 			if (tokenResponse.getStatusLine().getStatusCode() == 400) {
-				// FIXME apenas repassar json de erro recebido, como protocolo?
 				retorno.put("error", tokenObject.get("error"));
 				return Response.status(400).entity(retorno).build();
 			}
 
-			// Successful Token Response -> Validar resposta recebida
+			// Successful Token Response -> Validar resposta recebida e obtém claims de interesse
 			boolean isValid = tokenResponseValidation(tokenObject, tokenIDClaims);
 			if (!isValid) {
 				retorno.put("error", "invalid_token");
@@ -92,7 +93,6 @@ public class AuthResource {
 
 			// UserInfo Error Response
 			if (userInfoResponse.getStatusLine().getStatusCode() == 400) {
-				// FIXME apenas repassar json de erro recebido, como protocolo?
 				retorno.put("error", userInfoObject.get("error"));
 				retorno.put("error_description", userInfoObject.get("error_description"));
 				return Response.status(400).entity(retorno).build();
@@ -114,17 +114,11 @@ public class AuthResource {
 				return Response.status(400).entity(retorno).build();
 			}
 
-			// System.out.println("name =" + userInfoObject.get("name"));
-			// System.out.println("gender =" + userInfoObject.get("gender"));
-			// System.out.println("profile =" + userInfoObject.get("profile"));
-			// System.out.println("sub =" + userInfoObject.get("sub"));
-			// System.out.println("access_token =" + accessToken.toString());
-
 			tokenIDClaims.put("access_token", accessToken);
 			String subject = (String) tokenIDClaims.remove("sub");
 			tokenIDClaims.put("user", userInfoObject);
 
-			// cria novo token
+			// cria novo TEC token
 			String jwt = Jwts.builder().setSubject(subject).setClaims(tokenIDClaims)
 					.signWith(SignatureAlgorithm.HS512, Cfg.instance().getProperty("privateKey")).compact();
 			retorno.put("tec_token", jwt);
@@ -236,10 +230,10 @@ public class AuthResource {
 	 *
 	 * @return Resposta da requisição enviada
 	 */
-	public HttpResponse sendTokenRequest(CloseableHttpClient client, String code, String redirect_uri) {
+	public static HttpResponse sendTokenRequest(CloseableHttpClient client, String code, String redirect_uri) {
 		final HttpPost request = new HttpPost(Cfg.instance().getProperty("tokenEndPoint"));
 		request.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-		request.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + ClientUtils.getAuthorizationHeader());
+		request.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + ClientUtils.getAuthorizationHeader(ClientUtils.getClientID(), ClientUtils.getClientSecretGluu()));
 
 		final List<NameValuePair> data = new ArrayList<NameValuePair>();
 		data.add(new BasicNameValuePair("grant_type", "authorization_code"));
@@ -248,6 +242,7 @@ public class AuthResource {
 
 		try {
 			request.setEntity(new UrlEncodedFormEntity(data));
+			System.out.println(request);
 			return client.execute(request);
 		} catch (final IOException e) {
 			throw new RuntimeException("Erro ao enviar requisição");
@@ -264,9 +259,7 @@ public class AuthResource {
 	 */
 	public HttpResponse sendUserInfoRequest(CloseableHttpClient client, String access_token) {
 		String url = Cfg.instance().getProperty("userinfoEndpoint") + "?access_token=" + access_token;
-//		System.out.println("url = " + url);
-		// *** legacyIdTokenClaims habilitado na aba "JSON Configuration" no
-		// Gluuserver
+		// *** legacyIdTokenClaims habilitado na aba "JSON Configuration" no Gluuserver
 		final HttpGet request = new HttpGet(url);
 		request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + access_token);
 		try {

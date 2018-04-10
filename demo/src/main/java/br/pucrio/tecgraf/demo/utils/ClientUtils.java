@@ -23,11 +23,11 @@ public class ClientUtils {
 	 * 
 	 * @return - id do cliente e segredo codificado em Base64
 	 */
-	public static String getAuthorizationHeader() {
-		if (ClientUtils.getClientID() == null || ClientUtils.getClientSecretGluu() == null) {
+	public static String getAuthorizationHeader(String clientId, String clientSecret) {
+		if (clientId == null || clientSecret == null) {
 			return null;
 		}
-		String authString = ClientUtils.getClientID() + ":" + ClientUtils.getClientSecretGluu();
+		String authString = clientId + ":" + clientSecret;
 		String header = Base64.getEncoder().encodeToString(authString.getBytes());
 		header = header.replace("\n", "");
 		header = header.replace("\r", "");
